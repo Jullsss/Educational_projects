@@ -1,6 +1,0 @@
-all: analyze
-	g++ analyze.cpp -Wall -Werror -o analyze -ggdb3
-run: analyze
-	./analyze
-clean:
-	rm -rf *.o analyze
