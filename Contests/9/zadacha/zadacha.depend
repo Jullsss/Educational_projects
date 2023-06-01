@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1540923251 source:c:\users\user\documents\zadacha\main.c
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<fcntl.h>
+	<limits.h>
+

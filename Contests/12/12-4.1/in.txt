@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+count = int(input())
+ count *= (count + 1) // 2
+print (count % 10)

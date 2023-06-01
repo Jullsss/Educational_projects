@@ -1,0 +1,12 @@
+a.txt
+b.
+b.txt
+c.txt
+m
+main
+main.c
+main.o
+main1
+prog
+sh.cbp
+sh.layout

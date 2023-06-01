@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main(void)
+{
+    const double q = 0.995;
+    double **a, *b, *x;
+    int n = 30;
+    printf("The number of equations: 30");
+
+    a = (double **) calloc (n + 1, sizeof(double *));
+    for (int i = 0; i < n + 1; i++) {
+        a[i] = (double *) calloc (n + 1, sizeof(double));
+    }
+    b = (double *) calloc (n + 1, sizeof(double));
+    x = (double *) calloc (n + 1, sizeof(double));
+
+    double t;
+    printf("Enter x: ");
+    scanf("%lf", &t);
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (i == j) {
+                a[i][j] = pow(q - 1, i + j);
+            } else {
+                a[i][j] = pow(q, i + j) + 0.1 * (j - i);
+            }
+        }
+        b[i] = t * exp (t / i) * cos (t / i);
+    }
+
+    printf("\n");
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            printf("%f * x[%d]", a[i][j], j);
+            if (j < n) {
+                printf(" + ");
+            }
+        }
+        printf(" = %f\n", b[i]);
+    }
+    printf("\n");
+
+    double max;
+    int k = 0, index;
+    double eps;  // точность
+    printf("Enter the precision: ");
+    scanf("%lf", &eps);
+
+    while (k < n)
+    {
+        // Поиск строки с максимальным a[i][k]
+        max = fabs(a[k][k]);
+        index = k;
+        for (int i = k + 1; i < n; i++) {
+            if (fabs(a[i][k]) > max) {
+                max = fabs(a[i][k]);
+                index = i;
+            }
+        }
+
+        // Перестановка строк
+        if (max < eps) {
+            // нет ненулевых диагональных элементов
+            printf("The solution cannot be obtained because of the zero column ");
+            printf("[%d] of the matrix a\n", index);
+            //Решение получить невозможно из-за нулевого столбца %d матрицы A\n
+            return 0;
+        }
+
+        for (int j = 1; j <= n; j++) {
+            double temp = a[k][j];
+            a[k][j] = a[index][j];
+            a[index][j] = temp;
+        }
+
+        double temp = b[k];
+        b[k] = b[index];
+        b[index] = temp;
+
+        // Нормализация уравнений
+        for (int i = k; i < n; i++) {
+            double temp = a[i][k];
+            if (fabs(temp) < eps) {
+                continue; // для нулевого коэффициента пропустить
+            }
+            for (int j = 1; j <= n; j++) {
+                a[i][j] /= temp;
+            }
+            b[i] /= temp;
+
+            if (i == k) {
+                continue;
+            }
+
+            for (int j = 1; j <= n; j++) {
+                a[i][j] -= a[k][j];
+            }
+            b[i] -= b[k];
+        }
+        k++;
+    }
+
+    // обратная подстановка
+    for (k = n; k >= 1; k--) {
+        x[k] = b[k];
+        for (int i = 1; i <= k; i++) {
+            b[i] -= a[i][k] * x[k];
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        printf("x[%d] = %f\n", i, x[i]);
+    }
+
+    for (int i = 0; i < n + 1; i++) {
+        free(a[i]);
+    }
+    free(a);
+    free(b);
+    free(x);
+    return 0;
+}

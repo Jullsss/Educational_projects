@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1539352150 source:c:\users\user\documents\solve3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+

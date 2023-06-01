@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1539801870 source:c:\users\user\documents\wow2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+

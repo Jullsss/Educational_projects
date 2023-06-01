@@ -1,0 +1,6 @@
+all: main
+	g++ main.cpp -Wall -Werror -o main -ggdb3
+run: main
+	./main
+clean:
+	rm -rf *.o main

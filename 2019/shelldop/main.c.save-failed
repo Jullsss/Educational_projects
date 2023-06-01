@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define INC 10
+
+int main(void)
+{
+    char **words = NULL;
+    char c;
+    int flag = 1, commas = 0;
+
+    int size = INC;
+    int i = 0, j = 0, max = 0, k = 0;
+
+    int n = INC;
+    words = (char**) malloc(n * sizeof(char*));
+
+    while (1) {
+        char *buf = (char*) calloc(size, sizeof(char));
+        while ((c = getchar()) != '\n' && c != EOF && c != ' ' && c != '"') {
+            flag = 0;
+            if (i > size - 1) {
+                size += INC;
+                buf = (char*) realloc(buf, size*sizeof(char*));
+            }
+            buf[i++] = c;
+        }
+        if (c == '"') {
+            commas = 1;
+            while ((c = getchar()) != '\n' && c != EOF && c != '"') {
+                if (i > size - 1) {
+                    size += INC;
+                    buf = (char*) realloc(buf, size*sizeof(char*));
+                }
+                buf[i++] = c;
+            }
+            if (c == '"') {
+                commas = 0;
+            } else if (c == '\n' || c == EOF) {
+                printf("ERROR\n");
+            }
+        }
+        if (j + 1 >= n) {
+            n += INC;
+            words = (char**) realloc(words, n * sizeof(char*));
+        }
+        words[j] = (char*) calloc(i + 1, sizeof(char));
+        strcpy(words[j], buf);
+        j++;
+        i = 0;
+        size = INC;
+        if (c == ' ' && flag == 0) {
+            flag = 1;
+        } else if (c == '\n' && flag != 2) {
+            if (commas == 0) {
+                flag = 2;
+                for (k = max; k < j; k++) {
+                    if (strcmp(words[k], "") != 0) {
+                        printf("%s\n", words[k]);
+                    }
+                }
+            }
+            max = j;
+            commas = 0;
+        } else if (c == EOF) {
+            free(buf);
+            break;
+        }
+        free(buf);
+    }
+
+    for (k = 0; k < j; k++) {
+        free(words[k]);
+    }
+    free(words);
+    return 0;
+}
